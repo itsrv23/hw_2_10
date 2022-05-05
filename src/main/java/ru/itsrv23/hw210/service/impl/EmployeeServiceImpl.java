@@ -5,6 +5,7 @@ import ru.itsrv23.hw210.entity.Employee;
 import ru.itsrv23.hw210.exceptions.EmployeeIsExistsException;
 import ru.itsrv23.hw210.exceptions.EmployeeNotFoundException;
 import ru.itsrv23.hw210.service.EmployeeService;
+import ru.itsrv23.hw210.utils.ValidatorUserNames;
 
 import java.util.*;
 
@@ -30,6 +31,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee addEmployee(String firstName, String lastName, String patronymic, Integer salary, Integer department) {
+
+        firstName = ValidatorUserNames.check(firstName);
+        lastName = ValidatorUserNames.check(lastName);
+
+        // Проверка для тех у кого нет отчества
+        if(patronymic != null && !patronymic.equals("")) {
+            patronymic = ValidatorUserNames.check(patronymic);
+        }
 
         String fio =  getFIO(firstName, lastName, patronymic);
         if (employeeBookMap.containsKey(fio)) {
